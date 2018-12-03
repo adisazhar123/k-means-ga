@@ -45,13 +45,13 @@ class Clustering:
         self.dim = data.shape[1]
         self.penalty = 1000000
         self.kmax = kmax
+        # print self.dim
 
     def daviesBouldin(self, clusters):
         sigmaR = 0.0
         nc = len(clusters)
         for i in range(nc):
             sigmaR = sigmaR + self.computeR(clusters)
-            #print(sigmaR)
         DBIndex = float(sigmaR) / float(nc)
         return DBIndex
 
@@ -66,13 +66,13 @@ class Clustering:
 
     def computeRij(self, iCluster, jCluster):
         Rij = 0
-    
+
         d = self.euclidianDistance(
             iCluster.centroid, jCluster.centroid)
         #print("d",d)
         #print("icluster",iCluster.computeS())
         Rij = (iCluster.computeS() + jCluster.computeS()) / d
-       
+
         #print("Rij:", Rij)
         return Rij
 
@@ -123,7 +123,9 @@ class Clustering:
         clusters = []
         for j in range(kmax):
             point = Point(childChromosome.genes[j * dim: (j + 1) * dim])
-            clusters.append(Cluster(dim, point))
+            c = Cluster(dim, point)
+            clusters.append(c)
+            # print(c.centroid)
 
         clusters = self.calcDistance(clusters)
         DBIndex = self.daviesBouldin(clusters)
@@ -136,8 +138,10 @@ class Clustering:
         kmax = self.kmax
         generation = self.generation
         numOfInd = generation.numberOfIndividual
+        # print "num of ind " + str(numOfInd)
         data = self.data
         chromo = generation.chromosomes
+        # print chromo[0].genes
 
         for i in range(0, numOfInd):
 
@@ -145,9 +149,10 @@ class Clustering:
             clusters = []
             for j in range(kmax):
                 point = Point(chromo[i].genes[j * dim: (j + 1) * dim])
+                # print (("point is ") + str(point))
                 clusters.append(Cluster(dim, point))
 
-
+            #assign DBIndex to each chromosome fitness value
             clusters = self.calcDistance(clusters)
             DBIndex = self.daviesBouldin(clusters)
             generation.chromosomes[i].fitness = 1 / DBIndex
@@ -164,28 +169,33 @@ class Clustering:
 
         clusters = self.calcDistance(clusters)
         DBIndex = self.daviesBouldin(clusters)
-        z = (np.zeros(150)).tolist()
+        z = (np.zeros(1728)).tolist() #default 150
         for i, cluster in enumerate(clusters):
             for j in cluster.points:
+                # print (i)
                 z[j.z] = i
 
         correct_answer = 0
         for i in range(0, 50):
+            # print ("z[i] is: " + str(z[i]))
             if z[i] == 2:
                 correct_answer += 1
         for i in range(50, 100):
+            # print ("z[i] is: " + str(z[i]))
             if z[i] == 1:
                 correct_answer += 1
         for i in range(100, 150):
+            # print ("z[i] is: " + str(z[i]))
             if z[i] == 0:
                 correct_answer += 1
 
-        accuracy = (correct_answer / 150) * 100
+        # accuracy = (correct_answer / 150) * 100
 
-        print("accuracy :", accuracy)
+        # print("accuracy :", accuracy)
         print("iBest Fitness:", 1 / DBIndex)
         print("all index:", z)
         print("Clusters centroid:")
+
         for i, cluster in enumerate(clusters):
             print("centroid", i, " :", cluster.centroid)
 
@@ -202,7 +212,7 @@ class Clustering:
         centroids = []
         for i in range(kmax):
             centroids.append(clusters[i].centroid)
-        z = (np.zeros(150)).tolist()
+        z = (np.zeros(1728)).tolist() #default 150
         for i, cluster in enumerate(clusters):
             for j in cluster.points:
                 z[j.z] = i

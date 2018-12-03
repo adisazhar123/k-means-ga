@@ -5,6 +5,7 @@ import pandas as pd
 from cluster import Clustering
 from genetic import Genetic
 from generation import Generation
+from sklearn import preprocessing
 
 NORMALIZATION = True
 
@@ -39,8 +40,10 @@ def minmax(data):
             normData[i][j] = float(
                 data[i][j] - minElement) / (maxElement - minElement)
 
-    normData.to_csv('result/norm_data.csv', index=None, header=None)
+    normData.to_csv('result/norm_data0.csv', index=None, header=None)
     return normData
+
+
 
 if __name__ == '__main__':
     config_file = "config.txt"
@@ -65,7 +68,7 @@ if __name__ == '__main__':
     print("Pc", Pc)
     print("---------------------------------------")
 
-    # dim or pattern id 
+    # dim or pattern id
     chromosome_length = kmax * dim
 
     #-------------------------------------------------------#
@@ -82,10 +85,11 @@ if __name__ == '__main__':
 
     # ------------------------GA----------------------#
     while generationCount <= budget:
-        GA = Genetic(numOfInd, Ps, Pm, Pc, budget, data, generationCount, kmax)
-        generation, generationCount = GA.geneticProcess(
+        GA = Genetic(numOfInd, Ps, Pm, Pc, budget, data, generationCount, kmax) #init data genetic
+        generation, generationCount = GA.geneticProcess( #do generation process e.g. crossover, mutation, selection
             generation)
         iBest = generation.chromosomes[0]
+        print (iBest.genes)
         clustering.printIBest(iBest)
 
     # ------------------output result-------------------#

@@ -14,6 +14,6 @@ class Generation:
 
     def randomGenerateChromosomes(self, lengthOfChromosome):
         for i in range(0, self.numberOfIndividual):
-            chromosome = Chromosome([], lengthOfChromosome)
-            chromosome.randomGenerateChromosome()
+            chromosome = Chromosome([], lengthOfChromosome) #init chromosome with length for genes
+            chromosome.randomGenerateChromosome() #to generate genes for this chromosome
             self.chromosomes.append(chromosome)

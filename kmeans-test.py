@@ -1,3 +1,6 @@
+
+from __future__ import division
+
 import matplotlib.pyplot as plt
 from matplotlib import style
 style.use('ggplot')
@@ -17,7 +20,7 @@ import pandas as pd
 
 
 def main():
-    data = pd.read_csv('result/norm_data.csv', header=None)
+    data = pd.read_csv('result/norm_data0.csv', header=None)
     clf = KMeans(n_clusters=3)
     clf.fit_predict(data)
     print(clf.cluster_centers_)
@@ -29,15 +32,19 @@ def main():
     correct_answer = 0
     for i in range(0,50):
         if labels[i] == 0:
+            print labels[i]
             correct_answer+=1
     for i in range(50,100):
         if labels[i] == 1:
+            print labels[i]
             correct_answer+=1
     for i in range(100,150):
         if labels[i] == 2:
+            print labels[i]
             correct_answer+=1
-        
+
     accuracy = (correct_answer/150)*100
+    print 'ac is '
     print(accuracy)
 
 
