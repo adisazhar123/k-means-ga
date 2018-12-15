@@ -103,6 +103,7 @@ if __name__ == '__main__':
     # kmeans = KMeans(6, 200)
     #
     # labels, centers = kmeans.kmeans(df, kmeans.k)
+    # print(labels)
     # kmeans.accuracy(labels, classLabels)
 
     # for i in range(len(labels)):
@@ -115,8 +116,8 @@ if __name__ == '__main__':
     # kmeans parameters & GA parameters
     generationCount = 0
     budget, kmax, Ps, Pm, Pc, numOfInd = readVars(config_file)
-
-
+    #
+    #
     print("-------------GA Info-------------------")
     print("budget", budget)
     print("kmax", kmax)
@@ -143,11 +144,12 @@ if __name__ == '__main__':
 
     # ------------------------GA----------------------#
     while generationCount <= budget:
-        GA = Genetic(numOfInd, Ps, Pm, Pc, budget, data, generationCount, kmax)
+        GA = Genetic(numOfInd, Ps, Pm, Pc, budget, data, generationCount, kmax) #init constructor
         generation, generationCount = GA.geneticProcess(
             generation)
         iBest = generation.chromosomes[0]
-        clustering.printIBest(iBest)
+        clusters = clustering.printIBest(iBest)
+
 
     # ------------------output result-------------------#
-    clustering.output_result(iBest, data)
+    clustering.output_result(iBest, data, clusters)

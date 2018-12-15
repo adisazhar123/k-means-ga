@@ -93,13 +93,13 @@ class Clustering:
         dis = 0
         disSet = []
 
-        for z in range(data.shape[0]):
-            point = Point(data.loc[z][0:dim])
+        for z in range(data.shape[0]):  #count no of rows
+            point = Point(data.loc[z][0:dim]) #new point from row z
             point.z = z
 
             for i in range(kmax):
-                dis = self.euclidianDistance(clusters[i].centroid, point)
-                disSet.append(dis)
+                dis = self.euclidianDistance(clusters[i].centroid, point) #calculate distance from point to each cluster centroids
+                disSet.append(dis) #add distance to array
                 dis = 0
 
             clusters = self.findMin(
@@ -199,7 +199,9 @@ class Clustering:
         for i, cluster in enumerate(clusters):
             print("centroid", i, " :", cluster.centroid)
 
-    def output_result(self, iBest, data):
+        return clusters
+
+    def output_result(self, iBest, data, clusters2):
         print("Saving the result...")
         kmax = self.kmax
         dim = self.dim
@@ -227,7 +229,46 @@ class Clustering:
             col_name.append("f{0}".format(i))
         data.columns = col_name
 
+
+        # for i in range(data.shape[0]):
+        #     print(i)
+
         # insert cluster result
         data['Cluster Index'] = pd.Series(z, index=data.index)
         data.to_csv('result/result.csv', index=None)
+
+        dataInCluster0 = []
+        dataInCluster1 = []
+        dataInCluster2 = []
+        dataInCluster3 = []
+
+        # iterate number of rows
+        for i in range(data.shape[0]):
+            dataRow = [data.iloc[i][1], data.iloc[i][2], data.iloc[i][3], data.iloc[i][4], data.iloc[i][5]] #stores current data in row i
+
+            target = data.iloc[i][6] #get target class of row i
+            # store data points according to cluster
+            if target == 0:
+                dataInCluster0.append(dataRow)
+            elif target == 1:
+                dataInCluster1.append(dataRow)
+            elif target == 2:
+                dataInCluster2.append(dataRow)
+            elif target == 3:
+                dataInCluster3.append(dataRow)
+
+
+        print("SSE Cluster 0 " + str(self.SSE(clusters2[0].centroid, dataInCluster0)))
+        print("SSE Cluster 1 " + str(self.SSE(clusters2[1].centroid, dataInCluster1)))
+        print("SSE Cluster 2 " + str(self.SSE(clusters2[2].centroid, dataInCluster2)))
+        print("SSE Cluster 3 " + str(self.SSE(clusters2[3].centroid, dataInCluster3)))
+
+
         print("Done.")
+
+    def SSE(self, clusterAttribute, dataInCluster):
+        sse = 0
+        for i in range(len(dataInCluster)):
+            for j in range(len(dataInCluster[i])):
+                sse += (abs(dataInCluster[i][j] - clusterAttribute.pattern_id[j]))**2
+        return sse
