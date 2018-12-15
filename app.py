@@ -99,15 +99,11 @@ if __name__ == '__main__':
     classLabels = DataFrame.from_records(d2)[6]  # get class label, in the last column
     df = data[features]
 
-    # K-means Without GA
-    # kmeans = KMeans(6, 200)
+    #K-means Without GA
+    kmeans = KMeans(4, 5)
     #
-    # labels, centers = kmeans.kmeans(df, kmeans.k)
-    # print(labels)
-    # kmeans.accuracy(labels, classLabels)
+    kmeans.kmeans(df, kmeans.k)
 
-    # for i in range(len(labels)):
-    #     print(labels[i])
 
 
 

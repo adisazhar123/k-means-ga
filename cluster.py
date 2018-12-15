@@ -242,9 +242,10 @@ class Clustering:
         dataInCluster2 = []
         dataInCluster3 = []
 
+        #print(data.shape[0])
         # iterate number of rows
         for i in range(data.shape[0]):
-            dataRow = [data.iloc[i][1], data.iloc[i][2], data.iloc[i][3], data.iloc[i][4], data.iloc[i][5]] #stores current data in row i
+            dataRow = [data.iloc[i][0], data.iloc[i][1], data.iloc[i][2], data.iloc[i][3], data.iloc[i][4], data.iloc[i][5]] #stores current data in row i
 
             target = data.iloc[i][6] #get target class of row i
             # store data points according to cluster
